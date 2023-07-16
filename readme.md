@@ -1,3 +1,3 @@
 My custom CLI
 
-Just for fun
+You can run brew command, or do something on remote
