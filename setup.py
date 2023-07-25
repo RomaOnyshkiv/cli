@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name="Roman's CLI",
+    name="CLI",
     version='0.1',
     py_modules=['cli'],
     install_requires=[
