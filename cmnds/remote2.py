@@ -13,22 +13,19 @@ def run_on_remote(host, pwd, usr, command, file):
         exit()
 
     if file:
-        bash_script = open(file).read()
-        stdin, stdout, stderr = client.exec_command(bash_script)
-        print(stdout.read().decode())
-        err = stderr.read().decode()
-        if err:
-            print(err)
+        execute_me = open(file).read()
     else:
         if command:
-            print("=" * 50, command, "=" * 50)
-            stdin, stdout, stderr = client.exec_command(command)
-            print(stdout.read().decode())
-            err = stderr.read().decode()
-            if err:
-                print(err)
+            execute_me = command
         else:
+            print("No file or command")
             exit()
 
+    stdin, stdout, stderr = client.exec_command(execute_me)
+    print(stdout.read().decode())
+    err = stderr.read().decode()
+    if err:
+        print(err)
+
     client.close()
-    print("done")
+    print("=" * 10 + " done " + "=" * 10)
