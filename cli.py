@@ -2,7 +2,6 @@
 from cmnds import remote
 from cmnds import local
 from cmnds import generate_pass
-from cmnds import remote2
 
 import click
 
@@ -52,7 +51,7 @@ def generate_password(total, numbers, lower, upper, spec, amount, output):
 @click.option("--command", help="Command to be executed")
 @click.option("--file", help="script file")
 def execute_on_remote2(host, pwd, usr, command, file):
-    remote2.run_on_remote(host, pwd, usr, command, file)
+    remote.run_on_remote(host, pwd, usr, command, file)
 
 
 cli.add_command(execute_on_remote2)
