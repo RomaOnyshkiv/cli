@@ -25,8 +25,8 @@ def run_local(cm):
 
 @click.command(name="remote", help="Run command on remote")
 @click.option("--cm", default="ls -lah", help="Command to be executed on remote")
-@click.option("--server", default='roman', help="Remote host name")
-@click.option("--usr", default="root", help="Remote user")
+@click.option("--server", help="Remote host name")
+@click.option("--usr", help="Remote user")
 @click.option("--pswd", help="Remote password. Can be configured as environment variable 'export REMOTE_PASS=...'")
 def execute_on_remote(cm, server, usr, pswd):
     remote.run_ssh_command(cm, server, usr, pswd)
@@ -45,9 +45,9 @@ def generate_password(total, numbers, lower, upper, spec, amount, output):
 
 
 @click.command(name="remote2", help="Run command on remote server")
-@click.option("--host", default="164.68.106.64", help="Remote Hostname")
+@click.option("--host", help="Remote Hostname")
 @click.option("--pwd", help="Remote password")
-@click.option("--usr", default="root", help="Remote username")
+@click.option("--usr", help="Remote username")
 @click.option("--command", help="Command to be executed")
 @click.option("--file", help="script file")
 def execute_on_remote2(host, pwd, usr, command, file):

@@ -5,7 +5,9 @@ import paramiko
 
 def run_ssh_command(cmd, server, usr, pswd):
     password = os.environ["REMOTE_PASS"] if (pswd is None) else pswd
-    results = subprocess.run(("sshpass", "-p", password, "ssh", f'{usr}@{server}', cmd))
+    r_user = os.environ["REMOTE_USER"] if (usr is None) else usr
+    r_server = os.environ["REMOTE_SERVER"] if (server is None) else server
+    results = subprocess.run(("sshpass", "-p", password, "ssh", f'{r_user}@{r_server}', cmd))
     print(f'Exit code: {results.returncode}')
 
 
@@ -15,10 +17,12 @@ def get_remote_session(pswd):
 
 def run_on_remote(host, pwd, usr, command, file):
     pswd = os.environ["REMOTE_PASS"] if (pwd is None) else pwd
+    r_user = os.environ["REMOTE_USER"] if (usr is None) else usr
+    r_server = os.environ["REMOTE_SERVER"] if (host is None) else host
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     try:
-        client.connect(hostname=host, username=usr, password=pswd)
+        client.connect(hostname=r_server, username=r_user, password=pswd)
     except:
         print("[!] Cannot connect to the SSH Server")
         exit()
