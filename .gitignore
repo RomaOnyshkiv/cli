@@ -4,3 +4,7 @@ venv
 build
 __pycache__/
 cmnds/__pycache__/*
+*.spec
+dist/
+env
+sd.md
