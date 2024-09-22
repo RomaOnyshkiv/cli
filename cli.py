@@ -57,17 +57,20 @@ def execute_on_remote2(host, pwd, usr, command, file):
 
 
 @click.command(name="netrange", help="Calculate range of IPs")
-@click.option("--ip", help="ip address in format: 0.0.0.0/x")
-def calculate_ip_range(ip):
-    iprange = helper.get_ip_range(ip)
-    n_add = f'| Network address        | {iprange["network_address"]}'
-    b_add = f'| Broadcast address      | {iprange["broadcast_address"]}'
-    f_add = f'| First usable IP        | {iprange["first_usable_ip"]}'
-    l_add = f'| Last usable IP         | {iprange["last_usable_ip"]}'
-    t_add = f'| Total usable addresses | {iprange["total_usable_hosts"]}'
-    ip, net_mask = ip.split("/")
-    print(f'Results for IP -> {ip} with subnet -> {net_mask}:')
-    print(f'=' * l + sp(n_add) + sp(b_add) + sp(f_add) + sp(l_add) + sp(t_add))
+@click.option("--ips", help="ip addresses in format: \"0.0.0.0/x, 1.1.1.1/x, ...\"")
+def calculate_ip_range(ips):
+    all_ips = ips.split(",")
+    if len(all_ips) > 0:
+        for addr in range(len(all_ips)):
+            iprange = helper.get_ip_range(all_ips[addr])
+            n_add = f'| Network address        | {iprange["network_address"]}'
+            b_add = f'| Broadcast address      | {iprange["broadcast_address"]}'
+            f_add = f'| First usable IP        | {iprange["first_usable_ip"]}'
+            l_add = f'| Last usable IP         | {iprange["last_usable_ip"]}'
+            t_add = f'| Total usable addresses | {iprange["total_usable_hosts"]}'
+            ip, net_mask = all_ips[addr].split("/")
+            print(f'\nResults for IP_{addr +1} -> {ip.strip()}\nwith subnet -> {net_mask}:')
+            print(f'=' * l + sp(n_add) + sp(b_add) + sp(f_add) + sp(l_add) + sp(t_add))
 
 
 def sp(space_holder):
@@ -82,5 +85,5 @@ cli.add_command(execute_on_remote)
 cli.add_command(calculate_ip_range)
 
 if __name__ == '__main__':
-    l = 80
+    l = 60
     cli()
