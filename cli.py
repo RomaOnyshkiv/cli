@@ -2,7 +2,7 @@
 from cmnds import remote
 from cmnds import local
 from cmnds import generate_pass
-from cmnds import personal_helper as helper
+from cmnds.ip_helper import IpCalculator
 
 import click
 
@@ -60,21 +60,26 @@ def execute_on_remote2(host, pwd, usr, command, file):
 @click.option("--ips", help="ip addresses in format: \"0.0.0.0/x, 1.1.1.1/x, ...\"")
 def calculate_ip_range(ips):
     all_ips = ips.split(",")
+    total_amount_of_ips = 0
     if len(all_ips) > 0:
         for addr in range(len(all_ips)):
-            iprange = helper.get_ip_range(all_ips[addr])
+            iprange = IpCalculator(all_ips[addr]).get_ip_range()
             n_add = f'| Network address        | {iprange["network_address"]}'
             b_add = f'| Broadcast address      | {iprange["broadcast_address"]}'
             f_add = f'| First usable IP        | {iprange["first_usable_ip"]}'
             l_add = f'| Last usable IP         | {iprange["last_usable_ip"]}'
             t_add = f'| Total usable addresses | {iprange["total_usable_hosts"]}'
             ip, net_mask = all_ips[addr].split("/")
-            print(f'\nResults for IP_{addr +1} -> {ip.strip()}\nwith subnet -> {net_mask}:')
-            print(f'=' * l + sp(n_add) + sp(b_add) + sp(f_add) + sp(l_add) + sp(t_add))
+            total_amount_of_ips = total_amount_of_ips + iprange["total_usable_hosts"]
+            print(f'\nResults for IP Range {addr +1} -> {ip.strip()}\nwith subnet -> {net_mask}:')
+            print(f'=' * table_width + sp(n_add) + sp(b_add) + sp(f_add) + sp(l_add) + sp(t_add))
+    total = f'| Total usable hosts     | {total_amount_of_ips}'
+    print(f'\n\nRanges: {all_ips}')
+    print(f'=' * table_width + sp(total))
 
 
 def sp(space_holder):
-    return "\n" + space_holder + " " * (l - len(space_holder) - 1) + "|\n" + '=' * l
+    return "\n" + space_holder + " " * (table_width - len(space_holder) - 1) + "|\n" + '=' * table_width
 
 
 cli.add_command(execute_on_remote2)
@@ -85,5 +90,5 @@ cli.add_command(execute_on_remote)
 cli.add_command(calculate_ip_range)
 
 if __name__ == '__main__':
-    l = 60
+    table_width = 60
     cli()
