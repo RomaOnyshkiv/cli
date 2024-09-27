@@ -39,3 +39,6 @@ class IpCalculator:
 
     def __int_to_ip(self, ip_int):
         return ".".join(str((ip_int >> (8 * i)) & self.sub_block) for i in reversed(range(4)))
+
+    def ip_to_bin(self):
+        return '.'.join(format(int(octet), '08b') for octet in self.ip.split('.'))

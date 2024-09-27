@@ -3,6 +3,7 @@ from cmnds import remote
 from cmnds import local
 from cmnds import generate_pass
 from cmnds.ip_helper import IpCalculator
+from serv.services import Services
 
 import click
 
@@ -72,14 +73,20 @@ def calculate_ip_range(ips):
             ip, net_mask = all_ips[addr].split("/")
             total_amount_of_ips = total_amount_of_ips + iprange["total_usable_hosts"]
             print(f'\nResults for IP Range {addr +1} -> {ip.strip()}\nwith subnet -> {net_mask}:')
-            print(f'=' * table_width + sp(n_add) + sp(b_add) + sp(f_add) + sp(l_add) + sp(t_add))
+            print(f'=' * table_width + s.sp(n_add) + s.sp(b_add) + s.sp(f_add) + s.sp(l_add) + s.sp(t_add))
     total = f'| Total usable hosts     | {total_amount_of_ips}'
     print(f'\n\nRanges: {all_ips}')
-    print(f'=' * table_width + sp(total))
+    print(f'=' * table_width + s.sp(total))
 
 
-def sp(space_holder):
-    return "\n" + space_holder + " " * (table_width - len(space_holder) - 1) + "|\n" + '=' * table_width
+@click.command(name="iptobin", help="convert IP tp binary")
+@click.option("--ips", help="type IP addresses")
+def to_bin(ips):
+    all_ips = ips.split(',')
+    for ip in all_ips:
+        ip_bin = IpCalculator(ip).ip_to_bin()
+        rez = f'| IP {ip.strip()}' + ' ' * (19 - (4 + len(ip.strip()))) + f'| {ip_bin.strip()} '
+        print(f'Address: {ip.strip()} of {all_ips}\n' + f'=' * table_width + s.sp(rez))
 
 
 cli.add_command(execute_on_remote2)
@@ -88,7 +95,9 @@ cli.add_command(run_local)
 cli.add_command(run_brew)
 cli.add_command(execute_on_remote)
 cli.add_command(calculate_ip_range)
+cli.add_command(to_bin)
 
 if __name__ == '__main__':
     table_width = 60
+    s = Services(table_width=table_width)
     cli()
