@@ -72,7 +72,7 @@ def calculate_ip_range(ips):
             t_add = f'| Total usable addresses | {iprange["total_usable_hosts"]}'
             ip, net_mask = all_ips[addr].split("/")
             total_amount_of_ips = total_amount_of_ips + iprange["total_usable_hosts"]
-            print(f'\nResults for IP Range {addr +1} -> {ip.strip()}\nwith subnet -> {net_mask}:')
+            print(f'\nResults for IP Range {addr +1} -> {ip.strip()}\nwith subnet mask -> {iprange["subnet_mask"]}:')
             print(f'=' * table_width + s.sp(n_add) + s.sp(b_add) + s.sp(f_add) + s.sp(l_add) + s.sp(t_add))
     total = f'| Total usable hosts     | {total_amount_of_ips}'
     print(f'\n\nRanges: {all_ips}')

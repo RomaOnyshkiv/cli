@@ -23,13 +23,15 @@ class IpCalculator:
         broadcast_ip = self.__int_to_ip(broadcast_int)
         first_ip = self.__int_to_ip(first_ip_int)
         last_ip = self.__int_to_ip(last_ip_int)
+        subnet_mask = self.__int_to_ip(mask_int)
 
         return {
             'network_address': network_ip,
             'broadcast_address': broadcast_ip,
             'first_usable_ip': first_ip,
             'last_usable_ip': last_ip,
-            'total_usable_hosts': total_hosts
+            'total_usable_hosts': total_hosts,
+            'subnet_mask': subnet_mask
         }
 
     def __ip_to_int(self, str_ip):
