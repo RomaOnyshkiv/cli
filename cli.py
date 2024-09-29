@@ -79,14 +79,17 @@ def calculate_ip_range(ips):
     print(f'=' * table_width + s.sp(total))
 
 
-@click.command(name="iptobin", help="convert IP tp binary")
+@click.command(name="maskinfo", help="convert IP tp binary")
 @click.option("--ips", help="type IP addresses")
 def to_bin(ips):
     all_ips = ips.split(',')
-    for ip in all_ips:
-        ip_bin = IpCalculator(ip).ip_to_bin()
-        rez = f'| IP {ip.strip()}' + ' ' * (19 - (4 + len(ip.strip()))) + f'| {ip_bin.strip()} '
-        print(f'Address: {ip.strip()} of {all_ips}\n' + f'=' * table_width + s.sp(rez))
+    for ip in range(len(all_ips)):
+        mask_info = IpCalculator(all_ips[ip]).get_bits()
+        mask = f'| Mask          | {all_ips[ip].strip()}'
+        CIDR_not = f'| CIDR Notation | /{mask_info["cidr_not"]}'
+        binary = f'| Binary        | {mask_info["bin_ip"]}'
+        print(f'IP address {ip + 1}')
+        print(f'=' * table_width + s.sp(mask) + s.sp(CIDR_not) + s.sp(binary))
 
 
 cli.add_command(execute_on_remote2)

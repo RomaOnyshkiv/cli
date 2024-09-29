@@ -34,6 +34,17 @@ class IpCalculator:
             'subnet_mask': subnet_mask
         }
 
+    def get_bits(self):
+        bin_ip = self.__ip_to_bin()
+        cidr_not = 0
+        for n in bin_ip:
+            if n == "1":
+                cidr_not += 1
+        return {
+            "bin_ip": bin_ip,
+            "cidr_not": cidr_not
+        }
+
     def __ip_to_int(self, str_ip):
         octets = [int(octet) for octet in str_ip.split('.')]
         ip_int = (octets[0] << 24) | (octets[1] << 16) | (octets[2] << 8) | octets[3]
@@ -42,5 +53,5 @@ class IpCalculator:
     def __int_to_ip(self, ip_int):
         return ".".join(str((ip_int >> (8 * i)) & self.sub_block) for i in reversed(range(4)))
 
-    def ip_to_bin(self):
+    def __ip_to_bin(self):
         return '.'.join(format(int(octet), '08b') for octet in self.ip.split('.'))
