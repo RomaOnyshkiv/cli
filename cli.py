@@ -4,6 +4,7 @@ from cmnds import local
 from cmnds import generate_pass
 from cmnds.ip_helper import IpCalculator
 from serv.services import Services
+from enc.encrypt import Crypto
 
 import click
 
@@ -92,6 +93,28 @@ def to_bin(ips):
         print(f'=' * table_width + s.sp(mask) + s.sp(CIDR_not) + s.sp(binary))
 
 
+@click.command(name="cenc", help="Encrypt with cesar encryption")
+@click.option("--text", help="Text to encrypt")
+@click.option("--file", help="File to ecrypt")
+@click.option("--step", help="Encryption step")
+def cenc(text, file, step):
+    enc = Crypto(step)
+    status = enc.encrypt(text, file)
+    print(f'Exit {status}')
+
+
+@click.command(name="cdec", help="Encrypt with cesar encryption")
+@click.option("--text", help="Text to encrypt")
+@click.option("--file", help="File to ecrypt")
+@click.option("--step", help="Encryption step")
+def cdec(text, file, step):
+    enc = Crypto(step)
+    status = enc.decrypt(text, file)
+    print(f'Exit {status}')
+
+
+cli.add_command(cdec)
+cli.add_command(cenc)
 cli.add_command(execute_on_remote2)
 cli.add_command(generate_password)
 cli.add_command(run_local)
